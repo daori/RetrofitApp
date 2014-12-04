@@ -1,45 +1,63 @@
 package com.quantumfin.daori.retrofitapp;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import java.util.List;
+import com.quantumfin.daori.retrofitapp.helper.SecretHelper;
+import com.quantumfin.daori.retrofitapp.model.Register;
+import com.quantumfin.daori.retrofitapp.model.RegisterResponse;
 
-import retrofit.RestAdapter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity {
+
+    NetzMeAPI netzmeAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint("https://api.github.com")
-                    .build();
-            GitHubService github = restAdapter.create(GitHubService.class);
-//            List<Contributor> contributors = github.contributors("daori", "contactList");
-        }catch (RetrofitError error){
-            Log.d("error",error.toString());
-        }
+        final Register register = new Register();
+        register.setType("client_associate");
+        register.setApplicationName("native_android");
+        register.setApplicationType("native");
 
+        getNetzMeAPI().register(register, new Callback<RegisterResponse>() {
+            @Override
+            public void success(RegisterResponse registerResponse, Response response) {
+                if(SecretHelper.exist()){
+                    // TODO : Check secret dan id sudah ada atau tidak
+                    // TODO : Membuat helper untuk pengecekan secret dan create secret
+                }
+                showToast(registerResponse.getClient_id());
+            }
 
+            @Override
+            public void failure(RetrofitError error) {
+                showToast("Failed " + error.toString());
+//                Log.d("t3ns41 Error : ", error.toString());
+            }
+        });
 
-
-
-
-//        String contrib = "lalala";
-//        for (Contributor contributor : contributors) {
-//            Log.d("Contributor",contributor.login + " - " + contributor.contributions);
-//        }
     }
 
+    private void showToast(String message){
+        Toast.makeText(MainActivity.this, message,
+                Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,4 +77,12 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private NetzMeAPI getNetzMeAPI(){
+        if(netzmeAPI == null){
+            netzmeAPI = NetzMeRestClient.getService();
+        }
+        return netzmeAPI;
+    }
+
 }
