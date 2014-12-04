@@ -38,10 +38,10 @@ public class MainActivity extends Activity {
         getNetzMeAPI().register(register, new Callback<RegisterResponse>() {
             @Override
             public void success(RegisterResponse registerResponse, Response response) {
-                if(SecretHelper.exist()){
-                    // TODO : Check secret dan id sudah ada atau tidak
-                    // TODO : Membuat helper untuk pengecekan secret dan create secret
-                }
+//                if(SecretHelper.exist()){
+//                    // TODO : Check secret dan id sudah ada atau tidak
+//                    // TODO : Membuat helper untuk pengecekan secret dan create secret
+//                }
                 showToast(registerResponse.getClient_id());
             }
 
