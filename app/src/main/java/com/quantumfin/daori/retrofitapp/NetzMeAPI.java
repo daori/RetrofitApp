@@ -20,13 +20,6 @@ import retrofit.http.Path;
  */
 public interface NetzMeAPI {
 
-//    @FormUrlEncoded
-//    @POST("/api/client/register")
-//    public void registerSecret(
-//            @Field("type") String type,
-//            @Field("application_type") String application_type,
-//            @Field("application_name") String application_name);
-
     @POST("/api/client/register")
     void register(@Body Register register, Callback<RegisterResponse> cb);
 }

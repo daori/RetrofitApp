@@ -1,6 +1,7 @@
 package com.quantumfin.daori.retrofitapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.quantumfin.daori.retrofitapp.helper.ConsumerKeys;
 import com.quantumfin.daori.retrofitapp.helper.SecretHelper;
 import com.quantumfin.daori.retrofitapp.model.Register;
 import com.quantumfin.daori.retrofitapp.model.RegisterResponse;
@@ -35,23 +37,24 @@ public class MainActivity extends Activity {
         register.setApplicationName("native_android");
         register.setApplicationType("native");
 
-        getNetzMeAPI().register(register, new Callback<RegisterResponse>() {
-            @Override
-            public void success(RegisterResponse registerResponse, Response response) {
-//                if(SecretHelper.exist()){
-//                    // TODO : Check secret dan id sudah ada atau tidak
-//                    // TODO : Membuat helper untuk pengecekan secret dan create secret
-//                }
-                showToast(registerResponse.getClient_id());
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                showToast("Failed " + error.toString());
-//                Log.d("t3ns41 Error : ", error.toString());
-            }
-        });
+        if(ConsumerKeys.isConsumerKeysExist()){
+            //TODO use available key
+        } else {
+            getNetzMeAPI().register(register, new Callback<RegisterResponse>() {
+                @Override
+                public void success(RegisterResponse registerResponse, Response response) {
+                    showToast("client_id : " + registerResponse.getClientId() + "\n" +
+                                    "secret_key : " + registerResponse.getClientSecret()
+                    );
+                }
 
+                @Override
+                public void failure(RetrofitError error) {
+                    showToast("Failed " + error.toString());
+                }
+            });
+        }
     }
 
     private void showToast(String message){
@@ -72,9 +75,15 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_post :
+                this.startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.action_get :
+                this.startActivity(new Intent(this, GetListRepositoryActivity.class));
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

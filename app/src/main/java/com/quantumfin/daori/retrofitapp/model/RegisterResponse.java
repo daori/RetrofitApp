@@ -1,34 +1,39 @@
 package com.quantumfin.daori.retrofitapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by daori on 12/3/14.
  */
 public class RegisterResponse {
-    private String client_id;
-    private String client_secret;
-    private int expire_at;
+    @SerializedName("client_id")
+    private String clientId;
+    @SerializedName("client_secret")
+    private String clientSecret;
+    @SerializedName("expire_at")
+    private int expireAt;
 
-    public String getClient_id() {
-        return client_id;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setClient_id(String client_id) {
-        this.client_id = client_id;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getClient_secret() {
-        return client_secret;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
-    public void setClient_secret(String client_secret) {
-        this.client_secret = client_secret;
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 
-    public int getExpire_at() {
-        return expire_at;
+    public int getExpireAt() {
+        return expireAt;
     }
 
-    public void setExpire_at(int expire_at) {
-        this.expire_at = expire_at;
+    public void setExpireAt(int expireAt) {
+        this.expireAt = expireAt;
     }
 }
